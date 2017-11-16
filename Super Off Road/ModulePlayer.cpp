@@ -58,10 +58,65 @@ void ModulePlayer::setUpCarFrames()
 	carFrames->push_back(frame);
 	frame = buildNewSprite(435,10,14,11);
 	carFrames->push_back(frame);
+	frame = buildNewSprite(459, 10, 15, 11);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(483, 9, 15, 12);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(507, 8, 15, 13);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(531, 8, 13, 13);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(555, 8, 13, 13);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(579, 8, 12, 13);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(603, 8, 10, 13);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(627, 8, 8, 13);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(643, 9, 10, 12);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(667, 9, 13, 12);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(691, 9, 14, 12);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(715, 10, 15, 11);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(739,11, 16, 10);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(11, 12, 15, 9);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(35, 12, 16, 9);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(59, 11, 16, 10);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(83, 10, 17, 11);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(107, 10, 16, 11);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(131, 9, 15, 12);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(155, 9, 14, 12);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(179, 9, 14, 12);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(203, 9, 12, 12);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(227, 9, 10, 12);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(251, 9, 9, 12);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(267, 9, 10, 12);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(291, 9, 12, 12);
+	carFrames->push_back(frame);
+	frame = buildNewSprite(315, 10, 14, 11);
+	carFrames->push_back(frame);
 	frame = buildNewSprite(339, 11, 15, 10);
 	carFrames->push_back(frame);
 	frame = buildNewSprite(363, 12, 16, 9);
 	carFrames->push_back(frame);
+	
 
 }
 
@@ -246,33 +301,141 @@ void ModulePlayer::skidPenalty(const bool skidTotheLeft, const int skidLevel)
 	case NORTH:
 		if (skidTotheLeft) {
 			carPosition.x -= penalty;
+
+			if (currentSpritePosition != carFrames->size() - 1) {
+			currentSpritePosition += 1;
+			currentFrame = carFrames->at(currentSpritePosition);
+			}
+			else {
+				currentSpritePosition = 0;
+				currentFrame = carFrames->at(currentSpritePosition);
+			}
+
+			if (currentSpritePosition == 0) {
+				carOrientation = WEST;
+			}
 		}
 		else {
 			carPosition.x += penalty;
+
+			if (currentSpritePosition == 0) {
+				currentFrame = carFrames->back();
+				currentSpritePosition = carFrames->size() - 1;
+			}
+			else {
+				currentFrame = carFrames->at(currentSpritePosition - 1);
+				currentSpritePosition -= 1;
+			}
+
+			if (currentSpritePosition == 16) {
+				carOrientation = EAST;
+			}
+			
 		}
 		break;
 	case SOUTH:
 		if (skidTotheLeft) {
 			carPosition.x += penalty;
+
+			if (currentSpritePosition == 0) {
+				currentFrame = carFrames->back();
+				currentSpritePosition = carFrames->size() - 1;
+			}
+			else {
+				currentFrame = carFrames->at(currentSpritePosition - 1);
+				currentSpritePosition -= 1;
+			}
+
+			if (currentSpritePosition == 0) {
+				carOrientation = WEST;
+			}
+
 		}
 		else {
 			carPosition.x -= penalty;
+
+			if (currentSpritePosition != carFrames->size() - 1) {
+				currentSpritePosition += 1;
+				currentFrame = carFrames->at(currentSpritePosition);
+			}
+			else {
+				currentSpritePosition = 0;
+				currentFrame = carFrames->at(currentSpritePosition);
+			}
+
+			if (currentSpritePosition == 16) {
+				carOrientation = EAST;
+			}
+
 		}
 		break;
 	case WEST:
 		if (skidTotheLeft) {
 			carPosition.y -= penalty;
+
+			if (currentSpritePosition != carFrames->size() - 1) {
+				currentSpritePosition += 1;
+				currentFrame = carFrames->at(currentSpritePosition);
+			}
+			else {
+				currentSpritePosition = 0;
+				currentFrame = carFrames->at(currentSpritePosition);
+			}
+
+			if (currentSpritePosition == 8) {
+				carOrientation = SOUTH;
+			}
 		}
 		else {
 			carPosition.y += penalty;
+
+			if (currentSpritePosition == 0) {
+				currentFrame = carFrames->back();
+				currentSpritePosition = carFrames->size() - 1;
+			}
+			else {
+				currentFrame = carFrames->at(currentSpritePosition - 1);
+				currentSpritePosition -= 1;
+			}
+
+			if (currentSpritePosition == 24) {
+				carOrientation = NORTH;
+			}
 		}
 		break;
 	case EAST:
 		if (skidTotheLeft) {
 			carPosition.y += penalty;
+
+			if (currentSpritePosition == 0) {
+				currentFrame = carFrames->back();
+				currentSpritePosition = carFrames->size() - 1;
+			}
+			else {
+				currentFrame = carFrames->at(currentSpritePosition - 1);
+				currentSpritePosition -= 1;
+			}
+
+			if (currentSpritePosition == 24) {
+				carOrientation = NORTH;
+			}
 		}
 		else {
 			carPosition.y -= penalty;
+
+			if (currentSpritePosition != carFrames->size() - 1) {
+				currentSpritePosition += 1;
+				currentFrame = carFrames->at(currentSpritePosition);
+			}
+			else {
+				currentSpritePosition = 0;
+				currentFrame = carFrames->at(currentSpritePosition);
+			}
+
+			if (currentSpritePosition == 8) {
+				carOrientation = SOUTH;
+			}
+
 		}
 		break;
 	default:
