@@ -18,6 +18,35 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="Globals.h" />
+    <ClInclude Include="Module.h" />
+    <ClInclude Include="ModuleAudio.h" />
+    <ClInclude Include="ModuleFadeToBlack.h" />
+    <ClInclude Include="ModuleInput.h" />
+    <ClInclude Include="ModulePlayer.h" />
+    <ClInclude Include="ModuleRender.h" />
+    <ClInclude Include="ModuleTextures.h" />
+    <ClInclude Include="ModuleTrack.h" />
+    <ClInclude Include="ModuleWindow.h" />
+    <ClInclude Include="Point.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ModuleAudio.cpp" />
+    <ClCompile Include="ModuleFadeToBlack.cpp" />
+    <ClCompile Include="ModuleInput.cpp" />
+    <ClCompile Include="ModulePlayer.cpp" />
+    <ClCompile Include="ModuleRender.cpp" />
+    <ClCompile Include="ModuleTextures.cpp" />
+    <ClCompile Include="ModuleTrack.cpp" />
+    <ClCompile Include="ModuleWindow.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{54E56C73-62F9-475D-AC3A-1FF5AED924FB}</ProjectGuid>
@@ -84,7 +113,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -142,31 +171,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="SuperOffRoad.h" />
-    <ClInclude Include="targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="SuperOffRoad.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="SuperOffRoad.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="small.ico" />
-    <Image Include="SuperOffRoad.ico" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
