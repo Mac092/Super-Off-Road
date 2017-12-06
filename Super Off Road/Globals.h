@@ -42,9 +42,13 @@ enum update_status
 #define VSYNC true
 #define TITLE "Super Off Road"
 
-#define SKID_LEVEL_1 2
-#define SKID_LEVEL_2 4
-#define SKID_LEVEL_3 6
-#define SKID_LEVEL_4 8
+#define SKID_LEVEL_1 1
+#define SKID_LEVEL_2 2
+#define SKID_LEVEL_3 3
+#define SKID_LEVEL_4 4
+#define SKID_LEVEL_5 5
+#define SKID_LEVEL_6 6
+#define SKID_LEVEL_7 7
+
 
 #endif //__GLOBALS_H__

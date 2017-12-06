@@ -8,17 +8,18 @@
 #include <vector>
 #include <map>
 
+# define RADIUS_CAR_COLLIDER 10
 struct SDL_Texture;
 
 enum Orientation {NORTH, SOUTH, EAST, WEST, NORTHWEST, SOUTHWEST, NORTHEAST, SOUTHEAST};
 
-
-struct CarProperties {
-	int maxSpeed =5;
+struct CarPowerUps {
+	int maxSpeed = 6;
 	//int tires
 	//int amountOfNitro
 	//int shock
-	//int accel
+	int maxAccel = 0;
+
 };
 
 struct CarMovement {
@@ -26,6 +27,9 @@ struct CarMovement {
 	SDL_Rect currentCarSprite;
 	bool orientationChanged;
 	int carOrientationPosition;
+	int currentCarSpeed = 0;
+	int currentCarAccel = 0;
+
 };
 
 class ModulePlayer : public Module
@@ -39,6 +43,8 @@ public:
 	
 	bool CleanUp();
 	void setUpCarFrames();
+	void setUpCarEngine();
+	iPoint getCarCenterPosition() const;
 	//Orientation getCarOrientation();
 
 	SDL_Rect buildNewSprite(int x, int y, int w, int h);
@@ -50,22 +56,25 @@ public:
 	iPoint carPosition;
 	int currentFramePosition = 0;
 	std::vector<CarMovement> carFrames;
-	void rotateCarSprite(string side);
 
+	void rotateCarSprite(string side);
 	void skidEffect(const bool skidToTheLeft);
 	void skidPenalty(const bool skidTotheLeft, const int skidLevel);
-	
-	int carCurrentSpeed = 1;
-
 	void moveCar();
-	CarProperties carProperties;
+
+
+	CarPowerUps carPowerUps;
 	CarMovement currentCarMovement;
-
-
+	
+	bool accelerated = false;
+	bool maxSpeedReached = false;
 	int gameSpeed = 0;
 	int skidPower = 0;
+	int skidLevel = 0;
 	bool skidToTheLeft = false;
-	//Orientation carOrientation = WEST;
+	int gameRotation = 1;
+
+
 };
 
 #endif // __MODULEPLAYER_H__

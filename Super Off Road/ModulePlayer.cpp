@@ -17,6 +17,9 @@ ModulePlayer::ModulePlayer(bool start_enabled) : Module(start_enabled)
 	currentFrame.y = 12;
 	currentFrame.h = 9;
 	currentFrame.w =  15;
+
+	gameSpeed = 0;
+
 	
 }
 
@@ -37,6 +40,7 @@ bool ModulePlayer::Start()
 
 
 	setUpCarFrames();
+	setUpCarEngine();
 	
 
 	graphics = App->textures->Load("Game/red_sprites.png"); // arcade version
@@ -249,18 +253,58 @@ void ModulePlayer::setUpCarFrames()
 	currentCarMovement.currentCarSprite = currentFrame;
 	carFrames.push_back(currentCarMovement);
 
-	
-
-
 	currentFrame = carFrames.at(0).currentCarSprite;
 	
 }
 
-//Orientation ModulePlayer::getCarOrientation()
-//{
-//	//return carOrientation;
-//	return false;
-//}
+void ModulePlayer::setUpCarEngine()
+{
+	switch (carPowerUps.maxSpeed) {
+		case(0):
+		case(1):
+		case(2):
+			currentCarMovement.currentCarSpeed = 3;
+			break;
+		case(3):
+		case(4):
+		case(5):
+			currentCarMovement.currentCarSpeed = 2;
+			break;
+		case(6):
+			currentCarMovement.currentCarSpeed = 1;
+			break;
+		
+	}
+	switch (carPowerUps.maxAccel) {
+		case(0):
+		case(1):
+			currentCarMovement.currentCarAccel = 8;
+			break;
+		case(2):
+		case(3):
+			currentCarMovement.currentCarAccel = 7;
+			break;
+		case(4):
+		case(5):
+			currentCarMovement.currentCarAccel = 6;
+			break;
+		case(6):
+			currentCarMovement.currentCarAccel = 5;
+			break;
+	}
+}
+
+//TODO crear clase círculo y sustituirlo por el iPoint para no malgastar w y h que no se usan
+iPoint ModulePlayer::getCarCenterPosition() const
+{
+	iPoint carCenterPosition;
+
+	carCenterPosition.x = carPosition.x + currentFrame.w/2;
+	carCenterPosition.y = carPosition.y + currentFrame.h/2;
+
+	return carCenterPosition;
+}
+
 
 SDL_Rect ModulePlayer::buildNewSprite(int x, int y, int w, int h) {
 
@@ -295,108 +339,22 @@ void ModulePlayer::rotateCarSprite(string side)
 	}
 }
 
-void ModulePlayer::skidEffect(const bool skidToTheLeft) {
-
-	//Skid Power evaluation
-	if (skidPower == SKID_LEVEL_1) {
-		carCurrentSpeed = (carCurrentSpeed * 95) / 100;
-		skidPenalty(skidToTheLeft, 1);
-	}
-	else if (skidPower == SKID_LEVEL_2) {
-		carCurrentSpeed = (carCurrentSpeed * 85) / 100;
-		skidPenalty(skidToTheLeft, 2);
-	}
-	else if (skidPower == SKID_LEVEL_3) {
-		carCurrentSpeed = (carCurrentSpeed * 70) / 100;
-		skidPenalty(skidToTheLeft, 3);
-	}
-	else if (skidPower == SKID_LEVEL_4) {
-		carCurrentSpeed = (carCurrentSpeed * 50) / 100;
-		skidPenalty(skidToTheLeft, 4);
-	}
-
-}
-
-void ModulePlayer::skidPenalty(const bool skidTotheLeft, const int skidLevel)
-{
-	int penalty = 0;
-	if (skidLevel == SKID_LEVEL_1 || skidLevel == SKID_LEVEL_3) {
-		penalty = 2;
-	}
-	else if (skidLevel == SKID_LEVEL_2) {
-		penalty = 3;
-	}
-
-	switch (currentCarMovement.currentCarOrientation.at(currentCarMovement.carOrientationPosition)) {
-	case NORTH:
-		if (skidTotheLeft) {
-			if (carCurrentSpeed > 0) {
-				carPosition.x += penalty;
-			}
-		}
-		else {
-			if (carCurrentSpeed > 0) {
-				carPosition.x += penalty;
-			}
-		}
-		break;
-	case SOUTH:
-		if (skidTotheLeft) {
-			if (carCurrentSpeed > 0) {
-				carPosition.x += penalty;
-			}
-		}
-		else {
-			if (carCurrentSpeed > 0) {
-				carPosition.x -= penalty;
-			}
-
-		}
-		break;
-	case WEST:
-		if (skidTotheLeft) {
-			if (carCurrentSpeed > 0) {
-				carPosition.y -= penalty;
-			}
-		}
-		else {
-			if (carCurrentSpeed > 0) {
-				carPosition.y += penalty;
-			}
-		}
-		break;
-	case EAST:
-		if (skidTotheLeft) {
-			if (carCurrentSpeed > 0) {
-				carPosition.y += penalty;
-			}
-		}
-		else {
-			if (carCurrentSpeed > 0) {
-				carPosition.y -= penalty;
-			}
-		}
-		break;
-	default:
-		break;
-	}
-}
 
 
 void ModulePlayer::moveCar()
 {
 	//Car movement
 	if (carFrames.at(currentFramePosition).currentCarOrientation.at(currentCarMovement.carOrientationPosition) == NORTH) {
-		carPosition.y -= 1;
+		carPosition.y -= 2;
 	}
 	else if (carFrames.at(currentFramePosition).currentCarOrientation.at(currentCarMovement.carOrientationPosition) == SOUTH) {
-		carPosition.y += 1;
+		carPosition.y += 2;
 	}
 	else if (carFrames.at(currentFramePosition).currentCarOrientation.at(currentCarMovement.carOrientationPosition) == EAST) {
-		carPosition.x += 1;
+		carPosition.x += 2;
 	}
 	else if(carFrames.at(currentFramePosition).currentCarOrientation.at(currentCarMovement.carOrientationPosition) == WEST) {
-		carPosition.x -= 1;
+		carPosition.x -= 2;
 	}
 	else if (carFrames.at(currentFramePosition).currentCarOrientation.at(currentCarMovement.carOrientationPosition) == SOUTHWEST) {
 		carPosition.y += 1;
@@ -428,83 +386,122 @@ void ModulePlayer::moveCar()
 update_status ModulePlayer::Update()
 {
 
-	if (gameSpeed % 2 == 0) {
-
-		//----- Car Moving logic
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-			for (int i = 0; i < carCurrentSpeed; i++) {
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
+		accelerated = true;
+		if (currentCarMovement.currentCarAccel != currentCarMovement.currentCarSpeed) {
+			//moving until reach max speed
+			if (currentCarMovement.currentCarAccel == gameSpeed) {
 				moveCar();
+				currentCarMovement.currentCarAccel -= 1;
+				gameSpeed = 0;
+			}
+			else {
+				gameSpeed++;
 			}
 		}
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
-			if (gameSpeed % 3 == 0) {
-				if (carCurrentSpeed < carProperties.maxSpeed) {
-					carCurrentSpeed++;
-				}
-				for (int i = 0; i < carCurrentSpeed; i++) {
-					moveCar();
-				}
-			
-			}
-		}
-		// ---- Car deacceleration logic
 		else {
-			if (gameSpeed % 8 == 0) {
-				if (carCurrentSpeed > 1) {
-					carCurrentSpeed--;
-				}
-			}
-			if (carCurrentSpeed > 1) {
+			if (currentCarMovement.currentCarSpeed == gameSpeed) {
+				//TODO si se aplica un nitro se realizará el moveCar varias veces de forma extra durante unos frames
 				moveCar();
-				
+				gameSpeed = 0;
+			}
+			else {
+				gameSpeed++;
 			}
 		}
+
 	}
 
+//if (gameSpeed % 6 == 0) {
+
+//	//----- Car Moving logic
+//	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {	
+//			moveCar();
+//	}
+//	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
+//		if (carCurrentSpeed < carProperties.maxSpeed) {
+//				carCurrentSpeed++;
+//			}
+//		for (int i = 0; i < carCurrentSpeed; i++) {
+//			moveCar();
+//			App->renderer->Blit(graphics, carPosition.x, carPosition.y, &currentFrame, 3.0f);
+//		}
+//		
+//		
+//	}
+//	else {
+//		// ---- Car deacceleration logic
+//		//TODO: No me gusta esta comprobación pues se está ejecutando todo el rato...
+//		if (carCurrentSpeed > 0) {
+//			carCurrentSpeed--;
+//			moveCar();
+//		}
+//	}
+//	
+//}
+
+if (gameRotation == currentCarMovement.currentCarSpeed + 3) {
+	gameRotation = 1;
+	
+	//	else
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
+
+		rotateCarSprite("RIGHT");
+		//		//Control skidPower
+		//		if (skidLevel < SKID_LEVEL_7) {
+		//			skidLevel++;
+		//			skidPower++;
+		//		}
+		//		else {
+		//			skidLevel = 0;
+		//		}
+
+		//		skidEffect(skidToTheLeft);
+
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
+
+		rotateCarSprite("LEFT");
+		//		//Control skidPower
+		//		if (skidPower <= SKID_LEVEL_7) {
+		//			skidLevel++;
+		//			skidPower++;
+		//		}
+		//		else {
+		//			skidLevel = 0;
+		//		}
+		//		skidToTheLeft = true;
+		//		skidEffect(skidToTheLeft);
+		//	}
+		//	/*else if (App->input->GetKey(SDLK_RIGHT) == KEY_UP || App->input->GetKey(SDLK_LEFT) == KEY_UP) {
+		//	skidPower--;
+	}
+
+
+	//	//TODO: No me gusta esta comprobación pues se está ejecutando todo el rato...
+	//	if (skidPower > 0) {
+	//		skidPower--;
+	//		skidEffect(skidToTheLeft);
+
+	//	}
+}
+
+	
+	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN) {
+		moveCar();
+	}
 	//---- Car rotation logic
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN) {
 		rotateCarSprite("LEFT");
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN) {
 		rotateCarSprite("RIGHT");
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
-		if (gameSpeed % 6 == 0) {
-			rotateCarSprite("RIGHT");
-			//Control skidPower
-			if (skidPower < SKID_LEVEL_4) {
-				skidPower++;
-			}
-			else {
-				skidPower = 0;
-			}
-
-			skidEffect(skidToTheLeft);
-		}
-
-	}
-	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
-		if (gameSpeed % 6 == 0) {
-			rotateCarSprite("LEFT");
-			//Control skidPower
-			if (skidPower < SKID_LEVEL_4) {
-				skidPower++;
-			}
-			else {
-				skidPower = 0;
-			}
-			skidToTheLeft = true;
-			skidEffect(skidToTheLeft);
-		}
-	}
-	else if (App->input->GetKey(SDLK_RIGHT) == KEY_UP || App->input->GetKey(SDLK_LEFT) == KEY_UP) {
-		skidPower = 0;
-	}
-
-
+	
+    gameRotation++;
+	//TODO: si el jugador está quito esto puede aumentar cada frame hasta ser una burrada
 	App->renderer->Blit(graphics, carPosition.x, carPosition.y, &currentFrame, 3.0f);
 
-	gameSpeed++;
 	return UPDATE_CONTINUE;
 }
 
