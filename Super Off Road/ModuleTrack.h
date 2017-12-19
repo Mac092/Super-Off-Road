@@ -20,12 +20,16 @@ public:
 	bool Start();
 	update_status Update();
 	bool CleanUp();
+	void evaluateHeightMap();
 
 	SDL_Texture* graphics = nullptr;
 	SDL_Rect ground;
 	SDL_Rect wall;
 	SDL_Rect poodle1Rect;
-	vector<TerrainAlteration*> terrainAlterations;  
+	vector<TerrainAlteration*> terrainAlterations; 
+	int heightmap[SCREEN_WIDTH][SCREEN_HEIGHT];
+	int checkHeightSpecificValue(Uint32 pixel);
+	
 
 	TerrainAlteration * poodle1 = nullptr;
 

@@ -113,13 +113,13 @@ void ModulePlayer::setUpCarFrames()
 	currentCarMovement.currentCarSprite = currentFrame;
 	carFrames.push_back(currentCarMovement);
 
-	frameMovement = { SOUTH,SOUTH,SOUTH,SOUTHEAST,SOUTH,SOUTH,SOUTH };
+	frameMovement = { SOUTH,SOUTH,SOUTH,SOUTH,SOUTH,SOUTH,SOUTH };
 	currentFrame = buildNewSprite(603, 8, 10, 13);
 	currentCarMovement.currentCarOrientation = frameMovement;
 	currentCarMovement.currentCarSprite = currentFrame;
 	carFrames.push_back(currentCarMovement);
 
-	frameMovement = { SOUTH,SOUTH,SOUTHEAST,SOUTH,SOUTH,SOUTHEAST,SOUTH };
+	frameMovement = { SOUTH,SOUTH,SOUTH,SOUTHEAST,SOUTH,SOUTH,SOUTH };
 	currentFrame = buildNewSprite(627, 8, 8, 13);
 	currentCarMovement.currentCarOrientation = frameMovement;
 	currentCarMovement.currentCarSprite = currentFrame;

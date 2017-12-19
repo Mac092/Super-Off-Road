@@ -54,7 +54,7 @@
     <ProjectGuid>{54E56C73-62F9-475D-AC3A-1FF5AED924FB}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SuperOffRoad</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
