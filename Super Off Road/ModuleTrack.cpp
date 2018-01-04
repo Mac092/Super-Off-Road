@@ -41,7 +41,8 @@ bool ModuleTrack::Start()
 
 update_status ModuleTrack::Update()
 {
-	App->renderer->Blit(graphics, 0, 0, &ground, 3.0f);
+	// The reason of the 4 on the h value is to give the screen the black bars both above and beneath the ground
+	App->renderer->Blit(graphics, 0, 4, &ground, 3.0f);
 	App->player->Update();
 	
 
