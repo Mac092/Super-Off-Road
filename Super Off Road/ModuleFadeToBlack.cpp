@@ -74,6 +74,12 @@ void ModuleFadeToBlack::FadeToBlack(Module* module_on, Module* module_off, float
 
 	this->module_on = module_on;
 	this->module_off = module_off;
+
+	if (this->module_on != NULL && this->module_off != NULL) {
+		this->module_off->Disable();
+		this->module_on->Enable();
+	}
+	
 }
 
 bool ModuleFadeToBlack::isFading() const

@@ -4,6 +4,8 @@
 #include<list>
 #include "Globals.h"
 #include "Module.h"
+#include <vector>
+#include "Observer.h"
 
 class ModuleRender;
 class ModuleWindow;
@@ -13,8 +15,10 @@ class ModuleAudio;
 class ModulePlayer;
 class ModuleTrack;
 class ModuleFadeToBlack;
+class ModuleIntro;
 
-class Application
+
+class Application  : public Observer
 {
 public:
 
@@ -23,7 +27,9 @@ public:
 
 	bool Init();
 	update_status Update();
+	void Update(Subject *subject);
 	bool CleanUp();
+
 
 public:
 	ModuleRender* renderer;
@@ -34,12 +40,14 @@ public:
 	ModulePlayer* player;
 	ModuleTrack* track;
 	ModuleFadeToBlack* fade;
+	ModuleIntro * intro;
 
 private:
 
 	std::list<Module*> modules;
 
 };
+
 
 extern Application* App;
 

@@ -1,4 +1,3 @@
-
 #include "Application.h"
 #include "ModuleTrack.h"
 #include "ModuleAudio.h"
@@ -9,8 +8,6 @@
 
 #include "SDL_image\include\SDL_image.h"
 
-
-
 ModuleTrack::ModuleTrack(bool start_enabled) : Module(start_enabled)
 {
 	//truck terrain
@@ -19,20 +16,11 @@ ModuleTrack::ModuleTrack(bool start_enabled) : Module(start_enabled)
 	ground.h = 192;
 	ground.w = 320;
 
-	//walls
-	/*wall.x = 336;
-	wall.y = 1408;
-	wall.h = 198;
-	wall.w = 319;*/
-
-
-
 }
 
 
 ModuleTrack::~ModuleTrack()
 {
-	terrainAlterations.push_back(poodle1 = new TerrainAlteration(poodle1Rect.x,poodle1Rect.y,poodle1Rect.w,poodle1Rect.h));
 	 
 }
 
@@ -54,7 +42,6 @@ bool ModuleTrack::Start()
 update_status ModuleTrack::Update()
 {
 	App->renderer->Blit(graphics, 0, 0, &ground, 3.0f);
-	//App->renderer->Blit(graphics, 38, 10, &wall, 3.0f);
 	App->player->Update();
 	
 
@@ -63,7 +50,7 @@ update_status ModuleTrack::Update()
 
 bool ModuleTrack::CleanUp()
 {
-	return false;
+	return true;
 }
 
 void ModuleTrack::evaluateHeightMap()

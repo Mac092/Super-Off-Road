@@ -7,6 +7,7 @@
 #include "ModulePlayer.h"
 #include "ModuleTrack.h"
 #include "ModuleFadeToBlack.h"
+#include "ModuleIntro.h"
 
 
 using namespace std;
@@ -21,10 +22,8 @@ Application::Application()
 	modules.push_back(textures = new ModuleTextures());
 	modules.push_back(audio = new ModuleAudio());
 	modules.push_back(fade = new ModuleFadeToBlack());
+
 	
-	// Game Modules
-	modules.push_back(track = new ModuleTrack(false));
-	modules.push_back(player = new ModulePlayer(false));
 }
 
 Application::~Application()
@@ -35,6 +34,7 @@ Application::~Application()
 
 bool Application::Init()
 {
+	modules.push_back(intro = new ModuleIntro(true));
 	bool ret = true;
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret; ++it)
@@ -69,6 +69,20 @@ update_status Application::Update()
 			ret = (*it)->PostUpdate();
 
 	return ret;
+}
+
+void Application::Update(Subject * subject)
+{
+	if (track == nullptr && player == nullptr) {
+		track = new ModuleTrack(false);
+		player = new ModulePlayer(false);
+
+		// Game Modules // 
+		modules.push_back(track);
+		modules.push_back(player);	
+		App->fade->FadeToBlack(track, intro, 1.0f);
+	}
+	
 }
 
 bool Application::CleanUp()
