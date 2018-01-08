@@ -24,8 +24,10 @@ struct CarPowerUps {
 
 struct CarMovement {
 	std::vector<Orientation> currentCarOrientation;
+	std::vector < std::vector<SDL_Rect>>* rotationSpritesFromTerrainAlteration;
 	SDL_Rect currentCarSprite;
 	bool orientationChanged;
+	bool isRotatedDueTerrainAlteration = false;
 	int carOrientationPosition;
 	int currentCarSpeed = 0;
 	int currentCarAccel = 0;
@@ -43,15 +45,16 @@ public:
 	
 	bool CleanUp();
 	void setUpCarFrames();
+	vector<vector<SDL_Rect>>* setUpCarRotationFrames(CarMovement* frameCar, int framePosition);
 	void setUpCarEngine();
 	iPoint getCarCenterPosition() const;
-	//Orientation getCarOrientation();
-
 	SDL_Rect buildNewSprite(int x, int y, int w, int h);
+	//Orientation getCarOrientation();
 
 public:
 
 	SDL_Texture* graphics = nullptr;
+	SDL_Texture* rotatedGraphicsDueTerrainAlteration = nullptr;
 	SDL_Rect currentFrame;
 	iPoint carPosition;
 	int currentFramePosition = 0;
@@ -73,7 +76,6 @@ public:
 	int skidLevel = 0;
 	bool skidToTheLeft = false;
 	int gameRotation = 1;
-
 
 };
 

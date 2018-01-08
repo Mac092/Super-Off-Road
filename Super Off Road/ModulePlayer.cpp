@@ -38,12 +38,12 @@ bool ModulePlayer::Start()
 	currentCarMovement.orientationChanged = false;
 	currentCarMovement.carOrientationPosition = 0;
 
-
 	setUpCarFrames();
 	setUpCarEngine();
 	
+	graphics = App->textures->Load("Game/red_sprites.png");
+	rotatedGraphicsDueTerrainAlteration = App->textures->Load("Game/rotatedSpritesDueTerrainAlteration.png");
 
-	graphics = App->textures->Load("Game/red_sprites.png"); // arcade version
 	return true;
 }
 
@@ -156,6 +156,7 @@ void ModulePlayer::setUpCarFrames()
 	carFrames.push_back(currentCarMovement);
 
 	frameMovement = { EAST,EAST,EAST,EAST,EAST,EAST,EAST };
+	currentCarMovement.rotationSpritesFromTerrainAlteration = setUpCarRotationFrames(&currentCarMovement,16);
 	currentFrame = buildNewSprite(11, 12, 15, 9);
 	currentCarMovement.currentCarOrientation = frameMovement;
 	currentCarMovement.currentCarSprite = currentFrame;
@@ -255,6 +256,40 @@ void ModulePlayer::setUpCarFrames()
 
 	currentFrame = carFrames.at(0).currentCarSprite;
 	
+}
+
+vector<vector<SDL_Rect>>* ModulePlayer::setUpCarRotationFrames(CarMovement* frameCar, int framePosition)
+{
+	vector<vector<SDL_Rect>> rotationFrames(9,vector<SDL_Rect>(9)) ;
+	//SDL_Rect* rotationFrames = new SDL_Rect[9 * 9];
+	//// declaration
+	//char *dog = new char[640 * 480];
+
+	//// usage
+	//dog[first_index * 640 + second_index] = 'a';
+
+	//// deletion
+	//delete[] dog;
+
+	SDL_Rect frameToAdd;
+	switch (framePosition) {
+	case 16:
+		rotationFrames[0][0] = frameCar->currentCarSprite;
+		frameToAdd = buildNewSprite(33,8,15,15);
+		rotationFrames[0][1] = frameToAdd;
+		frameToAdd = buildNewSprite(57,7,16,8);
+		rotationFrames[0][2] = frameToAdd;
+		frameToAdd = buildNewSprite(81,7,13,8);
+		rotationFrames[0][3] = frameToAdd;
+		frameToAdd = buildNewSprite(101, 6, 14, 9);
+		rotationFrames[0][4] = frameToAdd;
+		frameToAdd = buildNewSprite(57, 7, 16, 8);
+
+	default:
+		break;
+	}
+
+	return &rotationFrames;
 }
 
 void ModulePlayer::setUpCarEngine()
@@ -500,7 +535,7 @@ if (gameRotation == currentCarMovement.currentCarSpeed + 3) {
 	
     gameRotation++;
 	//TODO: si el jugador está quito esto puede aumentar cada frame hasta ser una burrada
-	App->renderer->Blit(graphics, carPosition.x, carPosition.y, &currentFrame, 3.0f);
+	App->renderer->Blit((currentCarMovement.isRotatedDueTerrainAlteration == false) ? graphics : rotatedGraphicsDueTerrainAlteration, carPosition.x, carPosition.y, &currentFrame, 3.0f);
 
 	return UPDATE_CONTINUE;
 }

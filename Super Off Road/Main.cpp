@@ -2,10 +2,10 @@
 #include "Application.h"
 #include "Globals.h"
 #include "SDL/include/SDL.h"
+#include <malloc.h>
 
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
-
 
 enum main_states
 {
@@ -33,7 +33,6 @@ int main(int argc, char ** argv)
 			App = new Application();
 			state = MAIN_START;
 			break;
-
 		case MAIN_START:
 
 			LOG("Application Init --------------");
@@ -47,12 +46,38 @@ int main(int argc, char ** argv)
 				state = MAIN_UPDATE;
 				LOG("Application Update --------------");
 			}
-
+			if (_heapchk() != _HEAPOK)
 			break;
 
 		case MAIN_UPDATE:
 		{
 			int update_return = App->Update();
+
+			//keep it just in debug mode
+			//int  heapstatus;
+			//char *buffer;
+
+			//// Allocate and deallocate some memory  
+			//if ((buffer = (char *)malloc(100)) != NULL)
+			//	free(buffer);
+
+			//// Check heap status  
+			//heapstatus = _heapchk();
+			//switch (heapstatus)
+			//{
+			//case _HEAPOK:
+			//	printf(" OK - heap is fine\n");
+			//	break;
+			//case _HEAPEMPTY:
+			//	printf(" OK - heap is empty\n");
+			//	break;
+			//case _HEAPBADBEGIN:
+			//	printf("ERROR - bad start of heap\n");
+			//	break;
+			//case _HEAPBADNODE:
+			//	printf("ERROR - bad node in heap\n");
+			//	break;
+			//}
 
 			if (update_return == UPDATE_ERROR)
 			{

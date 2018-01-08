@@ -43,6 +43,30 @@ update_status ModuleTrack::Update()
 {
 	// The reason of the 4 on the h value is to give the screen the black bars both above and beneath the ground
 	App->renderer->Blit(graphics, 0, 4, &ground, 3.0f);
+	int  heapstatus;
+	char *buffer;
+
+	// Allocate and deallocate some memory  
+	if ((buffer = (char *)malloc(100)) != NULL)
+		free(buffer);
+
+	// Check heap status  
+	heapstatus = _heapchk();
+	switch (heapstatus)
+	{
+	case _HEAPOK:
+		printf(" OK - heap is fine\n");
+		break;
+	case _HEAPEMPTY:
+		printf(" OK - heap is empty\n");
+		break;
+	case _HEAPBADBEGIN:
+		printf("ERROR - bad start of heap\n");
+		break;
+	case _HEAPBADNODE:
+		printf("ERROR - bad node in heap\n");
+		break;
+	}
 	App->player->Update();
 	
 
